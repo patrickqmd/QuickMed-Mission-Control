@@ -1,0 +1,30 @@
+{
+  "workstreams": [
+    { "id": "ws-aob", "name": "QuickMed AOB recoveries", "description": "Assignment-of-benefits recovery files, evidence packets, patient outreach, and insurer-paid funds follow-up.", "status": "Active", "priority": "Urgent", "color": "#176b5b" },
+    { "id": "ws-insurer", "name": "Insurer reimbursement", "description": "Claims-data work, payment trails, reimbursement disputes, and payer follow-up.", "status": "Active", "priority": "High", "color": "#2f6f9f" },
+    { "id": "ws-counsel", "name": "Counsel / litigation", "description": "Counsel requests, litigation follow-up, limitations analysis, strategy notes, and issue lists.", "status": "Active", "priority": "High", "color": "#6f4e9f" },
+    { "id": "ws-signal", "name": "Signal / Flow Health", "description": "Signal Diagnostics and Flow Health matters requiring separate entity tracking and follow-up.", "status": "Active", "priority": "Normal", "color": "#59714a" },
+    { "id": "ws-software", "name": "Software build", "description": "Codex-ready specs, build queue, product ideas, local tools, and shipped software notes.", "status": "Active", "priority": "High", "color": "#9b5d22" },
+    { "id": "ws-admin", "name": "Admin / operations", "description": "Internal operating tasks, process cleanup, records, and company administration.", "status": "Active", "priority": "Normal", "color": "#686f76" },
+    { "id": "ws-bizdev", "name": "Business development", "description": "Opportunity tracking, partner follow-up, and relationship-building work.", "status": "Active", "priority": "Normal", "color": "#ad6a5a" }
+  ],
+  "matters": [
+    { "id": "mat-aob-template", "name": "AOB recovery file intake template", "type": "AOB recovery", "entity": "QuickMed Diagnostics", "status": "Active", "priority": "Urgent", "workstreamId": "ws-aob", "owner": "Patrick", "summary": "Template matter for tracking AOB recovery files. Patient balance remains $0; dispute concerns insurer-paid funds allegedly retained despite AOB language.", "nextAction": "Fill evidence checklist for first active files.", "blockedReason": "Waiting on initial claim/check data imports.", "updatedAt": "2026-06-19T12:00:00.000Z" }
+  ],
+  "tasks": [
+    { "id": "task-evidence-packet", "title": "Build first active AOB evidence packet", "description": "Use the evidence-gap list as the packet checklist. Keep patient balance language precise.", "status": "In Progress", "priority": "Urgent", "dueDate": "2026-06-19", "tags": "evidence,AOB,packet", "sortOrder": 1, "blocked": false, "blockedReason": "", "workstreamId": "ws-aob", "matterId": "mat-aob-template", "archived": false },
+    { "id": "task-limitations", "title": "Confirm limitations date fields for recovery files", "description": "Separate service, billing, check issue, receipt, cashing/deposit, discovery, outreach, and filing dates.", "status": "Blocked", "priority": "High", "dueDate": "2026-06-20", "tags": "limitations,counsel", "sortOrder": 1, "blocked": true, "blockedReason": "Need counsel review of preferred date taxonomy.", "workstreamId": "ws-counsel", "matterId": "mat-aob-template", "archived": false }
+  ],
+  "notes": [
+    { "id": "note-aob-guardrail", "title": "AOB framing guardrail", "body": "For QuickMed AOB matters, do not imply ordinary patient medical debt. The working position is patient balance remains $0; the dispute concerns insurer-paid funds allegedly issued to and retained by the patient despite assignment-of-benefits language.", "tags": "AOB,language,guardrail", "matterId": "mat-aob-template", "taskId": "", "updatedAt": "2026-06-19T12:00:00.000Z" }
+  ],
+  "evidenceGaps": [
+    { "id": "gap-intake-proof", "matterId": "mat-aob-template", "label": "AOB / intake proof and timestamp", "description": "Attach intake proof showing assignment language and timing.", "status": "Missing", "source": "Intake records", "nextAction": "Locate intake packet and timestamp export." },
+    { "id": "gap-check-dates", "matterId": "mat-aob-template", "label": "Check issue and cashing dates", "description": "Keep check issue, receipt, and deposit/cashing dates separate for limitations analysis.", "status": "Requested", "source": "Claims/payment trail", "nextAction": "Request payer ledger or portal screenshot." },
+    { "id": "gap-outreach", "matterId": "mat-aob-template", "label": "Outreach history", "description": "Calls, emails, letters, and any response history.", "status": "Missing", "source": "Internal notes", "nextAction": "Collect prior outreach log." }
+  ],
+  "drafts": [
+    { "id": "draft-packet-generator", "title": "Codex build brief: evidence packet generator", "type": "Codex build brief", "body": "Build a local tool that takes a matter, renders an evidence checklist, and exports a packet summary with missing/requested/received evidence grouped by source.", "tags": "codex,software,evidence", "matterId": "", "workstreamId": "ws-software", "updatedAt": "2026-06-19T12:00:00.000Z" },
+    { "id": "draft-limitations-email", "title": "Counsel email: limitations date taxonomy", "type": "counsel email", "body": "Draft request for counsel to confirm which dates should be captured and how to preserve issue-specific limitations analysis across QuickMed AOB recovery files.", "tags": "counsel,limitations,AOB", "matterId": "mat-aob-template", "workstreamId": "ws-counsel", "updatedAt": "2026-06-19T12:00:00.000Z" }
+  ]
+}

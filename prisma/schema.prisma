@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Workstream {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  status      String   @default("Active")
+  priority    String   @default("Normal")
+  color       String   @default("#176b5b")
+  icon        String   @default("Folder")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  matters     Matter[]
+  tasks       Task[]
+  drafts      Draft[]
+}
+
+model Matter {
+  id            String        @id @default(cuid())
+  name          String
+  type          String
+  entity        String
+  status        String        @default("Active")
+  priority      String        @default("Normal")
+  owner         String        @default("Patrick")
+  summary       String        @default("")
+  nextAction    String        @default("")
+  blockedReason String        @default("")
+  workstreamId  String
+  workstream    Workstream    @relation(fields: [workstreamId], references: [id], onDelete: Cascade)
+  tasks         Task[]
+  notes         Note[]
+  evidenceGaps  EvidenceGap[]
+  drafts        Draft[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([workstreamId])
+  @@index([status])
+  @@index([priority])
+}
+
+model Task {
+  id            String     @id @default(cuid())
+  title         String
+  description   String     @default("")
+  status        String     @default("Not Started")
+  priority      String     @default("Normal")
+  dueDate       DateTime?
+  tags          String     @default("")
+  sortOrder     Int        @default(0)
+  blocked       Boolean    @default(false)
+  blockedReason String     @default("")
+  archived      Boolean    @default(false)
+  workstreamId  String
+  workstream    Workstream @relation(fields: [workstreamId], references: [id], onDelete: Cascade)
+  matterId      String?
+  matter        Matter?    @relation(fields: [matterId], references: [id], onDelete: SetNull)
+  notes         Note[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([status, sortOrder])
+  @@index([priority])
+  @@index([dueDate])
+  @@index([workstreamId])
+  @@index([matterId])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  tags      String   @default("")
+  matterId  String?
+  matter    Matter?  @relation(fields: [matterId], references: [id], onDelete: Cascade)
+  taskId    String?
+  task      Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([matterId])
+  @@index([taskId])
+}
+
+model EvidenceGap {
+  id          String   @id @default(cuid())
+  label       String
+  description String   @default("")
+  status      String   @default("Missing")
+  source      String   @default("")
+  nextAction  String   @default("")
+  matterId    String
+  matter      Matter   @relation(fields: [matterId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([matterId])
+  @@index([status])
+}
+
+model Draft {
+  id           String      @id @default(cuid())
+  title        String
+  type         String
+  body         String
+  tags         String      @default("")
+  matterId     String?
+  matter       Matter?     @relation(fields: [matterId], references: [id], onDelete: SetNull)
+  workstreamId String?
+  workstream   Workstream? @relation(fields: [workstreamId], references: [id], onDelete: SetNull)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([type])
+  @@index([matterId])
+  @@index([workstreamId])
+}
